@@ -3,11 +3,16 @@ from db import query
 from flask_cors import CORS
 import jwt
 import datetime
+import os
+from dotenv import load_dotenv
+
+load_dotenv() # .env faylidan o'zgaruvchilarni yuklash
 
 app = Flask(__name__)
-app.secret_key = 'your_flask_secret'
-SECRET_KEY = 'your_jwt_secret'
-CORS(app, debug=True)
+app.secret_key = os.environ.get('FLASK_SECRET_KEY', 'default_flask_secret_for_dev')
+SECRET_KEY = os.environ.get('JWT_SECRET_KEY', 'default_jwt_secret_for_dev')
+frontend_url = os.environ.get('FRONTEND_URL', 'http://localhost:5173') # Vite'ning standart porti
+CORS(app, supports_credentials=True, origins=[frontend_url])
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -80,7 +85,7 @@ from functools import wraps
 import jwt
 from flask import Flask, request, jsonify
 
-SECRET_KEY = 'your_secret_key'  # Замените на ваш секретный ключ
+SECRET_KEY = os.environ.get('JWT_SECRET_KEY', 'default_jwt_secret_for_dev') # Замените на ваш секретный ключ
 
 
 
