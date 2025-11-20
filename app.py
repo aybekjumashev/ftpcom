@@ -26,7 +26,7 @@ def login():
     if not username or not password:
         return jsonify({'error': 'Username and password are required'}), 400
 
-    user = query("SELECT id, password FROM users WHERE username=%s", [username], fetch=True)
+    user = query("SELECT id, password_hash FROM users WHERE username=%s", [username], fetch=True)
 
     if user and user[0][1] == password:
         session['user_id'] = user[0][0]
@@ -75,7 +75,7 @@ def register():
 
     # Добавляем нового пользователя с временем регистрации
     query(
-        "INSERT INTO users (username, password, created_at) VALUES (%s, %s, CURRENT_TIMESTAMP)",
+        "INSERT INTO users (username, password_hash, created_at) VALUES (%s, %s, CURRENT_TIMESTAMP)",
         [username, password]
     )
 
